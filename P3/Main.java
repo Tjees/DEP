@@ -2,11 +2,13 @@ import java.sql.*;
 import java.util.List;
 
 public class Main {
+    private static Connection con;
+
     public static void main(String[] args) {
         // System.out.println("Hello World!");
         try {
             // Verbinden met database.
-            Connection con = getConnection();
+            con = getConnection();
 
             // Nieuwe reiziger.
             // Reiziger reiziger1 = new Reiziger(9, "PP", "van", "Achteren", Date.valueOf("1904-02-20"));
@@ -39,6 +41,12 @@ public class Main {
         Connection con;
         con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/DP_OV-Chipkaart", "postgres", "1357" );
         return con;
+    }
+
+    private static void closeConnection() throws SQLException {
+        if(con != null){
+            con.close();
+        }
     }
 
     private static void testReizigerDAO(ReizigerDAO rdao) throws SQLException {
