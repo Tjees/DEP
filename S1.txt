@@ -1,0 +1,37 @@
+ALTER TABLE medewerkers
+ADD geslacht varchar(1) CHECK (geslacht='M' OR geslacht='V');
+
+INSERT INTO medewerkers(mnr, naam, voorl, functie, chef, gbdatum, maandsal, comm, afd, geslacht)
+VALUES ( 8000, 'DONK', 'A', 'MANAGER', 7839, '1904-12-17', 420, NULL, 10, 'M' );
+INSERT INTO afdelingen(anr, naam, locatie, hoofd)
+VALUES( 50, 'ONDERZOEK', 'ZWOLLE', 8000 );
+
+CREATE SEQUENCE afdelingnummers
+START WITH 60
+INCREMENT BY 10
+MAXVALUE 90
+NO CYCLE;
+
+INSERT INTO afdelingen(anr, naam, locatie, hoofd)
+VALUES(nextval('afdelingnummers'), 'COACHING', 'UTRECHT', 8000);
+INSERT INTO afdelingen(anr, naam, locatie, hoofd)
+VALUES(nextval('afdelingnummers'), 'MARKETING', 'UTRECHT', 8000);
+INSERT INTO afdelingen(anr, naam, locatie, hoofd)
+VALUES(nextval('afdelingnummers'), 'GEKKIES', 'UTRECHT', 8000);
+ALTER TABLE afdelingen ALTER COLUMN anr TYPE NUMERIC(3);
+
+CREATE TABLE adressen (
+	postcode varchar(6),
+	huisnummer NUMERIC(3),
+	ingangsdatum DATE,
+	einddatum DATE CHECK(einddatum>ingangsdatum),
+	telefoon NUMERIC(10) UNIQUE,
+	med_mnr NUMERIC(10) CONSTRAINT med_mnr_nn NOT NULL,
+	CONSTRAINT mnr_fk FOREIGN KEY(med_mnr) REFERENCES medewerkers(mnr),
+	CONSTRAINT adr_pk PRIMARY KEY(postcode, huisnummer, ingangsdatum)
+);
+INSERT INTO adressen(postcode, huisnummer, ingangsdatum, einddatum, telefoon, med_mnr)
+VALUES ('1234AB', 12, '1909-10-12', '1910-10-12', 123456789, 8000);
+
+ALTER TABLE medewerkers
+ADD CONSTRAINT check_comm CHECK ((functie = 'VERKOPER' AND comm IS NOT NULL) OR (functie <> 'VERKOPER' AND comm IS NULL));
