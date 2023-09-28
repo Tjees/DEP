@@ -91,7 +91,7 @@ WHERE cursus IN (
 )
 AND begindatum IN (
 	SELECT begindatum FROM uitvoeringen
-	WHERE (begindatum > '2020-01-01')
+	WHERE (begindatum > TO_DATE('20200101','YYYYMMDD'))
 );
 
 
