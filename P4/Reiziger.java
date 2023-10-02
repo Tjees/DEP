@@ -68,8 +68,8 @@ public class Reiziger {
         this.geboortedatum = geboortedatum;
     }
 
-    @Override
-    public String toString() {
+    //@Override
+    public String oldtoString() {
         if( this.adres != null ) {
             return "Reiziger {" + "#" + id + ", " + voorletters + " " + tussenvoegsel + " " + achternaam + ", " + geboortedatum.toString() +
                     ", " + adres.toString()+ "}";
@@ -77,6 +77,19 @@ public class Reiziger {
         else {
             return "Reiziger {" + "#" + id + ", " + voorletters + " " + tussenvoegsel + " " + achternaam + ", " + geboortedatum.toString() + "}";
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Reiziger{" +
+                "id=" + id +
+                ", voorletters='" + voorletters + '\'' +
+                ", tussenvoegsel='" + tussenvoegsel + '\'' +
+                ", achternaam='" + achternaam + '\'' +
+                ", geboortedatum=" + geboortedatum +
+                ", adres=" + adres +
+                ", OVChipkaartList=" + OVChipkaartList +
+                '}';
     }
 
     // Constructor.

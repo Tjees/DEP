@@ -8,15 +8,18 @@ public class OVChipkaart {
     private int klasse;
     private double saldo;
     private int reiziger_id;
-    private Reiziger reiziger;
-    private ArrayList<Product> ProductList = new ArrayList<>();
+    private ArrayList<Integer> ProductList = new ArrayList<>();
 
-    public List<Product> getProductList() {
+    public List<Integer> getProductList() {
         return ProductList;
     }
 
     public void addProduct(Product product) {
-        this.ProductList.add(product);
+        this.ProductList.add(product.getProduct_nummer());
+    }
+
+    public void deleteProduct(Product product) {
+        ProductList.remove(Integer.valueOf(product.getProduct_nummer()));
     }
 
     public OVChipkaart(int kaart_nummer, Date geldig_tot, int klasse, double saldo, int reiziger_id) {
@@ -27,15 +30,15 @@ public class OVChipkaart {
         this.reiziger_id = reiziger_id;
     }
 
-    public OVChipkaart(){}
-
-    public Reiziger getReiziger() {
-        return reiziger;
+    public int getReiziger() {
+        return reiziger_id;
     }
 
     public void setReiziger(Reiziger reiziger) {
-        this.reiziger = reiziger;
+        this.reiziger_id = reiziger.getId();
     }
+
+    public OVChipkaart(){}
 
     public int getKaart_nummer() {
         return kaart_nummer;
@@ -75,5 +78,17 @@ public class OVChipkaart {
 
     public void setReiziger_id(int reiziger_id) {
         this.reiziger_id = reiziger_id;
+    }
+
+    @Override
+    public String toString() {
+        return "OVChipkaart{" +
+                "kaart_nummer=" + kaart_nummer +
+                ", geldig_tot=" + geldig_tot +
+                ", klasse=" + klasse +
+                ", saldo=" + saldo +
+                ", reiziger_id=" + reiziger_id +
+                ", ProductList=" + ProductList +
+                '}';
     }
 }

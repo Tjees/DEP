@@ -9,6 +9,7 @@ public class Main {
         try {
             // Verbinden met database.
             con = getConnection();
+            con.setAutoCommit(false);
 
             // Nieuwe reiziger.
             // Reiziger reiziger1 = new Reiziger(9, "PP", "van", "Achteren", Date.valueOf("1904-02-20"));
@@ -31,6 +32,11 @@ public class Main {
             OVChipkaart kaart2 = new OVChipkaart(4567, Date.valueOf("2019-12-31"), 1, 50.00, 9);
             OVChipkaart kaart3 = new OVChipkaart(8901, Date.valueOf("2019-12-31"), 1, 50.00, 9);
 
+            reiziger1.getOVChipkaartList().add(kaart1);
+            kaart1.setReiziger(reiziger1);
+            System.out.println(reiziger1);
+            System.out.println(kaart1);
+
             reiziger1.setAdres(adres1);
             reiziger1.addOVChipkaart(kaart1);
 
@@ -46,15 +52,31 @@ public class Main {
 
             // Nieuw product.
             Product product1 = new Product(7, "Product", "Een Product", 10);
+            Product product2 = new Product(7, "Product2", "Een Tweede Product", 20);
+            Product product3 = new Product(8, "Product3", "Een Derde Product", 30);
 
             product1.addOVChipkaart(kaart1);
             product1.addOVChipkaart(kaart2);
             product1.addOVChipkaart(kaart3);
+            kaart1.addProduct(product1);
+            kaart2.addProduct(product1);
+            kaart3.addProduct(product1);
+
+            product3.addOVChipkaart(kaart1);
+            product3.addOVChipkaart(kaart2);
+            product3.addOVChipkaart(kaart3);
+            kaart1.addProduct(product3);
+            kaart2.addProduct(product3);
+            kaart3.addProduct(product3);
+
+            System.out.println(product1);
+            System.out.println(product3);
+            System.out.println(kaart1);
+            System.out.println(kaart2);
+            System.out.println(kaart3);
 
             product1sql.delete(product1);
             product1sql.save(product1);
-
-            Product product2 = new Product(7, "Product2", "Een Tweede Product", 20);
 
             product2.addOVChipkaart(kaart1);
             product2.addOVChipkaart(kaart2);
@@ -64,6 +86,8 @@ public class Main {
 
             // testReizigerDAO(reiziger1sql);
             // testAdresDAO(adres1sql);
+
+            con.rollback();
         }
         catch ( Exception excp ) {
             System.out.println(excp.getMessage());

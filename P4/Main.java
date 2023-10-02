@@ -9,6 +9,7 @@ public class Main {
         try {
             // Verbinden met database.
             con = getConnection();
+            con.setAutoCommit(false);
 
             // Nieuwe reiziger.
             // Reiziger reiziger1 = new Reiziger(9, "PP", "van", "Achteren", Date.valueOf("1904-02-20"));
@@ -16,27 +17,77 @@ public class Main {
              ReizigerDAOPsql reiziger1sql = new ReizigerDAOPsql(con);
              AdresDAOPsql adres1sql = new AdresDAOPsql(con);
              OVChipkaartDAOPsql kaart1sql = new OVChipkaartDAOPsql(con);
+             ProductDAOPsql product1sql = new ProductDAOPsql(con);
+
              reiziger1sql.setAdao(adres1sql);
              reiziger1sql.setOVDao(kaart1sql);
              adres1sql.setRdao(reiziger1sql);
+             product1sql.setOVDao(kaart1sql);
             // reiziger1sql.save(reiziger1);
 
             // Nieuwe reiziger.
             Reiziger reiziger1 = new Reiziger(9, "AA", "van", "Achteren", Date.valueOf("1904-02-20"));
             Adres adres1 = new Adres(10, "1234AB", "12", "Sesamstraat", "UTRECHT", 9);
             OVChipkaart kaart1 = new OVChipkaart(1234, Date.valueOf("2019-12-31"), 1, 50.00, 9);
+            OVChipkaart kaart2 = new OVChipkaart(4567, Date.valueOf("2019-12-31"), 1, 50.00, 9);
+            OVChipkaart kaart3 = new OVChipkaart(8901, Date.valueOf("2019-12-31"), 1, 50.00, 9);
+
+            reiziger1.getOVChipkaartList().add(kaart1);
+            kaart1.setReiziger(reiziger1);
+            System.out.println(reiziger1);
+            System.out.println(kaart1);
+
             reiziger1.setAdres(adres1);
             reiziger1.addOVChipkaart(kaart1);
+
             kaart1.setReiziger(reiziger1);
+            kaart2.setReiziger(reiziger1);
+            kaart3.setReiziger(reiziger1);
 
-            kaart1sql.save(kaart1);
+//            kaart1sql.save(kaart1);
+//
+//            for( Reiziger r: reiziger1sql.findAll()){
+//                System.out.println(r.toString());
+//            }
 
-            for( Reiziger r: reiziger1sql.findAll()){
-                System.out.println(r.toString());
-            }
+            // Nieuw product.
+            Product product1 = new Product(7, "Product", "Een Product", 10);
+            Product product2 = new Product(7, "Product2", "Een Tweede Product", 20);
+            Product product3 = new Product(8, "Product3", "Een Derde Product", 30);
+
+            product1.addOVChipkaart(kaart1);
+            product1.addOVChipkaart(kaart2);
+            product1.addOVChipkaart(kaart3);
+            kaart1.addProduct(product1);
+            kaart2.addProduct(product1);
+            kaart3.addProduct(product1);
+
+            product3.addOVChipkaart(kaart1);
+            product3.addOVChipkaart(kaart2);
+            product3.addOVChipkaart(kaart3);
+            kaart1.addProduct(product3);
+            kaart2.addProduct(product3);
+            kaart3.addProduct(product3);
+
+            System.out.println(product1);
+            System.out.println(product3);
+            System.out.println(kaart1);
+            System.out.println(kaart2);
+            System.out.println(kaart3);
+
+            product1sql.delete(product1);
+            product1sql.save(product1);
+
+            product2.addOVChipkaart(kaart1);
+            product2.addOVChipkaart(kaart2);
+
+            product1sql.update(product2);
+            product1sql.findByOVChipkaart(kaart1);
 
             // testReizigerDAO(reiziger1sql);
             // testAdresDAO(adres1sql);
+
+            con.rollback();
         }
         catch ( Exception excp ) {
             System.out.println(excp.getMessage());
